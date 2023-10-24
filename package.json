@@ -10,7 +10,8 @@
     "lint:fix": "eslint --ext .ts,.tsx --fix src",
     "preview": "vite preview",
     "prettier": "prettier --check src",
-    "prettier:fix": "prettier --write src"
+    "prettier:fix": "prettier --write src",
+    "commitlint": "commitlint --edit"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -33,6 +34,8 @@
     "husky": "^8.0.3",
     "lint-staged": "^14.0.0",
     "prettier": "^3.0.3",
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
 
     "typescript": "^5.0.2",
     "vite": "^4.4.8"
