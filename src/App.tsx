@@ -1,15 +1,15 @@
-import './App.css';
+import React, { Component } from 'react';
+import Search from './components/search/Search';
+import ErrorBoundary from './components/error/ErrorBoundary';
 
-function App() {
-  const a = 1 + 3;
-  console.log(a);
-  return (
-    <>
-      <p>Первая строка</p>
-      <p>Вторая строка</p>
-      <p>третья строка</p>
-    </>
-  );
+export default class App extends Component {
+  render(): React.ReactElement {
+    return (
+      <ErrorBoundary>
+        <>
+          <Search />
+        </>
+      </ErrorBoundary>
+    );
+  }
 }
-
-export default App;
