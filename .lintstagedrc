@@ -1,0 +1,6 @@
+{
+  "*.+(js|mjs|cjs|jsx|mjsx|ts|mts|cts|tsx|mtsx)": [
+    "npm run lint",
+    "npm run prettier:fix"
+  ],
+}
