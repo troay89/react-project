@@ -30,7 +30,18 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      return <h1>Sorry.. there was an error</h1>;
+      return (
+        <form>
+          <h1>Извините ничего не найдено</h1>
+          <button
+            onClick={() => {
+              localStorage.setItem('searchValue', '');
+            }}
+          >
+            назад
+          </button>
+        </form>
+      );
     }
 
     return this.props.children;

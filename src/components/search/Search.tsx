@@ -22,16 +22,20 @@ type State = Readonly<SearchInputState>;
 export default class Search extends Component<Props, State> {
   public static readonly defaultProps: DefaultProps = {};
 
-  onSubmit() {
+  private onErrorSubmit() {
+    this.saveSearchValue('announcement');
+  }
+
+  private onSubmit() {
     this.saveSearchValue(this.state.inputSearch ?? '');
   }
 
-  saveSearchValue(searchValue: string) {
+  private saveSearchValue(searchValue: string) {
     localStorage.setItem(SEARCH_VALUE, searchValue.trim());
     this.getContent().then((r) => r);
   }
 
-  async getContent() {
+  private async getContent() {
     const result = await getCharacters(
       localStorage.getItem(SEARCH_VALUE) ?? ''
     );
@@ -51,7 +55,7 @@ export default class Search extends Component<Props, State> {
               defaultValue={localStorage.getItem(SEARCH_VALUE) ?? ''}
               className={classes.searchInput}
               type={'search'}
-              placeholder={'Введите сюда, что вы хотите найти'}
+              placeholder={'Введите сюда имя персонажа которого хотите найти'}
               onChange={(event) =>
                 this.setState({ inputSearch: event.target.value })
               }
@@ -61,6 +65,12 @@ export default class Search extends Component<Props, State> {
               type={'button'}
               value={'НАЙТИ'}
               onClick={this.onSubmit.bind(this)}
+            />
+            <input
+              className={classes.searchButton}
+              type={'button'}
+              value={'Ошибка'}
+              onClick={this.onErrorSubmit.bind(this)}
             />
           </form>
         </header>
