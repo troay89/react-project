@@ -1,8 +1,0 @@
-.containerCard {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  background-color: rebeccapurple;
-  padding-top: 20px;
-}
