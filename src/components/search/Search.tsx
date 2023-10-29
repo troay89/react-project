@@ -28,7 +28,9 @@ export default class Search extends Component<Props, State> {
   }
 
   private onSubmit() {
-    this.saveSearchValue(this.state.inputSearch ?? '');
+    this.saveSearchValue(
+      this.state.inputSearch ?? localStorage.getItem(SEARCH_VALUE) ?? ''
+    );
   }
 
   private saveSearchValue(searchValue: string) {
