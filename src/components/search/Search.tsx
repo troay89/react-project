@@ -13,6 +13,7 @@ interface SearchProps extends SearchDefaultProps {}
 interface SearchInputState {
   content: ContentI;
   inputSearch: string;
+  count: number;
 }
 
 type DefaultProps = Readonly<SearchDefaultProps>;
@@ -23,7 +24,7 @@ export default class Search extends Component<Props, State> {
   public static readonly defaultProps: DefaultProps = {};
 
   private onErrorSubmit() {
-    this.saveSearchValue('announcement');
+    this.setState({ count: 1 });
   }
 
   private onSubmit() {
@@ -47,6 +48,9 @@ export default class Search extends Component<Props, State> {
   }
 
   render(): React.ReactElement {
+    if (this.state?.count === 1) {
+      throw new Error('crashed!');
+    }
     return (
       <>
         <header className={classes.searchArea}>
@@ -75,18 +79,22 @@ export default class Search extends Component<Props, State> {
           </form>
         </header>
         <main className={classes.containerCard}>
-          {this.state?.content?.results.map((characterInfo) => {
-            return (
-              <Card
-                key={characterInfo.id}
-                id={characterInfo.id}
-                linkImage={characterInfo.image}
-                nameCharacter={characterInfo.name}
-                species={characterInfo.species}
-                gender={characterInfo.gender}
-              />
-            );
-          })}
+          {this.state?.content.results !== undefined ? (
+            this.state?.content.results.map((characterInfo) => {
+              return (
+                <Card
+                  key={characterInfo.id}
+                  id={characterInfo.id}
+                  linkImage={characterInfo.image}
+                  nameCharacter={characterInfo.name}
+                  species={characterInfo.species}
+                  gender={characterInfo.gender}
+                />
+              );
+            })
+          ) : (
+            <p>Извините ничего не найдено</p>
+          )}
         </main>
       </>
     );

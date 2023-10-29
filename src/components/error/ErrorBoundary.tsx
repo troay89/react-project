@@ -27,13 +27,7 @@ export default class ErrorBoundary extends Component<Props, State> {
       return (
         <form>
           <h1>Извините ничего не найдено</h1>
-          <button
-            onClick={() => {
-              localStorage.setItem('searchValue', '');
-            }}
-          >
-            назад
-          </button>
+          <button onClick={() => {}}>назад</button>
         </form>
       );
     }
