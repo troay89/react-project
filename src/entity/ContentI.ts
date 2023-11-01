@@ -1,4 +1,4 @@
-import CharacterI from './Character';
+import CharacterI from './CharacterI';
 
 export default interface ContentI {
   info: {
