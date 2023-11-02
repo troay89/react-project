@@ -1,43 +1,56 @@
 import classes from './Content.module.css';
-import Card from './Card/Card';
 import React, { useEffect, useState } from 'react';
 import getCharacters from '../../api/api';
-import { SEARCH_VALUE } from '../../entity/constants';
-import ContentI from '../../entity/ContentI';
+import {
+  ContentI,
+  NOT_FOUNDED_MESSAGE,
+  SEARCH_VALUE,
+} from '../../models/models';
+import { Loader } from '../loader/Loader';
+import { Card } from './Card/Card';
 
 interface ContentP {
   search: string;
 }
 
-export default function Content({ search }: ContentP) {
-  const [content, setContent] = useState<ContentI | undefined>(undefined);
+const Content = ({ search }: ContentP) => {
+  const [content, setContent] = useState<ContentI | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getCharacters(localStorage.getItem(SEARCH_VALUE) ?? '').then((result) =>
-      setContent(result)
-    );
+    setLoading(true);
+    getCharacters(localStorage.getItem(SEARCH_VALUE) ?? '')
+      .then((result) => setContent(result))
+      .then(() => setLoading(false));
   }, [search]);
 
   console.log(search, 'Content');
 
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <main className={classes.containerCard}>
-      {content !== undefined ? (
+      {content?.results ? (
         content.results.map((characterInfo) => {
+          const { id, image, name, species, gender } = characterInfo;
           return (
             <Card
-              key={characterInfo.id}
-              id={characterInfo.id}
-              image={characterInfo.image}
-              name={characterInfo.name}
-              species={characterInfo.species}
-              gender={characterInfo.gender}
+              key={id}
+              id={id}
+              image={image}
+              name={name}
+              species={species}
+              gender={gender}
             />
           );
         })
       ) : (
-        <p>Извините ничего не найдено</p>
+        <p>{NOT_FOUNDED_MESSAGE}</p>
       )}
     </main>
   );
-}
+};
+
+export { Content };

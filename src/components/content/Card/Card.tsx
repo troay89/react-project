@@ -8,7 +8,7 @@ interface CardPropsI {
   gender: string;
 }
 
-export default function Card({ id, image, species, gender, name }: CardPropsI) {
+const Card = ({ id, image, species, gender, name }: CardPropsI) => {
   return (
     <div key={id}>
       <img src={image} alt={'изображения персонажа'}></img>
@@ -18,4 +18,6 @@ export default function Card({ id, image, species, gender, name }: CardPropsI) {
       <p>species: {species}</p>
     </div>
   );
-}
+};
+
+export { Card };

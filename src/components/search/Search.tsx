@@ -1,26 +1,27 @@
 import classes from './Search.module.css';
 import React, { useState } from 'react';
-import { SEARCH_VALUE } from '../../entity/constants';
+import { SEARCH_VALUE } from '../../models/models';
 
-export default function Search({
+const Search = ({
   onSendSearch,
 }: {
   onSendSearch: (search: string) => void;
-}) {
-  const [inputSearch, setInputSearch] = useState<string>();
+}) => {
+  const [inputSearch, setInputSearch] = useState<string>(
+    localStorage.getItem(SEARCH_VALUE) ?? ''
+  );
   const [count, setCount] = useState<number>(0);
 
   function onErrorSubmit() {
     setCount(1);
   }
 
-  function onSubmit() {
+  function onSubmitHandler() {
     saveSearchValue(inputSearch ?? localStorage.getItem(SEARCH_VALUE) ?? '');
     onSendSearch(inputSearch ?? '');
   }
 
   function saveSearchValue(searchValue: string) {
-    console.log(searchValue);
     localStorage.setItem(SEARCH_VALUE, searchValue.trim());
   }
 
@@ -31,7 +32,7 @@ export default function Search({
   }
   return (
     <header className={classes.searchArea}>
-      <form className={classes.searchForm}>
+      <form className={classes.searchForm} onSubmit={onSubmitHandler}>
         <input
           defaultValue={localStorage.getItem(SEARCH_VALUE) ?? ''}
           className={classes.searchInput}
@@ -41,9 +42,8 @@ export default function Search({
         />
         <input
           className={classes.searchButton}
-          type={'button'}
+          type={'submit'}
           value={'НАЙТИ'}
-          onClick={onSubmit}
         />
         <input
           className={classes.searchButton}
@@ -54,4 +54,6 @@ export default function Search({
       </form>
     </header>
   );
-}
+};
+
+export { Search };

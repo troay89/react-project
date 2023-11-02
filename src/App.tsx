@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Search from './components/search/Search';
-import ErrorBoundary from './components/error/ErrorBoundary';
-import Content from './components/content/Content';
+import { ErrorBoundary } from './components/error/ErrorBoundary';
+import { Search } from './components/search/Search';
+import { Content } from './components/content/Content';
 
 export default function App() {
   const [inputSearch, setInputSearch] = useState<string>('R');
