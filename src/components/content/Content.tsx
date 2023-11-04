@@ -24,7 +24,7 @@ const Content = ({ search }: ContentP) => {
       .then(() => setLoading(false));
   }, [search]);
 
-  console.log(search, 'Content');
+  console.log(content, 'Content');
 
   if (loading) {
     return <Loader />;
@@ -49,6 +49,7 @@ const Content = ({ search }: ContentP) => {
       ) : (
         <p>{NOT_FOUNDED_MESSAGE}</p>
       )}
+      <span className={'pages'}></span>
     </main>
   );
 };

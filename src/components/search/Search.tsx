@@ -16,8 +16,11 @@ const Search = ({
     setCount(1);
   }
 
-  function onSubmitHandler() {
-    saveSearchValue(inputSearch ?? localStorage.getItem(SEARCH_VALUE) ?? '');
+  function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    saveSearchValue(
+      inputSearch.trim() ?? localStorage.getItem(SEARCH_VALUE) ?? ''
+    );
     onSendSearch(inputSearch ?? '');
   }
 
