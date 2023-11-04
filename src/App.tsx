@@ -8,11 +8,15 @@ export default function App() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [inputSearch, setInputSearch] = useState<string>('R');
 
-  searchParams.get('character');
-
   const sendSearch = (search: string) => {
     setInputSearch(search);
-    setSearchParams({ character: inputSearch });
+    searchParams.set('character', search.trim());
+    setSearchParams(searchParams);
+  };
+
+  const sendNumberPage = (numberPage: number) => {
+    searchParams.set('page', numberPage.toString());
+    setSearchParams(searchParams);
   };
 
   console.log(inputSearch);
@@ -20,7 +24,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <Search onSendSearch={sendSearch} />
-      <Content search={inputSearch} />
+      <Content search={inputSearch} onNumberPage={sendNumberPage} />
     </ErrorBoundary>
   );
 }

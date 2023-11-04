@@ -2,11 +2,11 @@ import classes from './Search.module.css';
 import React, { useState } from 'react';
 import { SEARCH_VALUE } from '../../models/models';
 
-const Search = ({
-  onSendSearch,
-}: {
+interface SearchI {
   onSendSearch: (search: string) => void;
-}) => {
+}
+
+const Search = ({ onSendSearch }: SearchI) => {
   const [inputSearch, setInputSearch] = useState<string>(
     localStorage.getItem(SEARCH_VALUE) ?? ''
   );
@@ -18,9 +18,7 @@ const Search = ({
 
   function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    saveSearchValue(
-      inputSearch.trim() ?? localStorage.getItem(SEARCH_VALUE) ?? ''
-    );
+    saveSearchValue(inputSearch ?? localStorage.getItem(SEARCH_VALUE) ?? '');
     onSendSearch(inputSearch ?? '');
   }
 

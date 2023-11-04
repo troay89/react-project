@@ -1,9 +1,12 @@
 import { ContentI } from '../models/models';
 
-async function getCharacters(search: string): Promise<ContentI> {
+//поиск: "https://rickandmortyapi.com/api/character/?page=2&name=rick"
+//без поиска 'https://rickandmortyapi.com/api/character/?page=2'
+
+async function getCharacters(search: string, page: number): Promise<ContentI> {
   const res: Response = await fetch(
-    `https://rickandmortyapi.com/api/character/${
-      search === '' ? '' : `?name=${search}`
+    `https://rickandmortyapi.com/api/character/?page=${page}${
+      search === '' ? '' : `&name=${search}`
     }`,
     {
       method: 'GET',
