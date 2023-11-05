@@ -1,15 +1,17 @@
 import { ContentI } from '../models/models';
 
-//поиск: "https://rickandmortyapi.com/api/character/?page=2&name=rick"
-//без поиска 'https://rickandmortyapi.com/api/character/?page=2'
-
-async function getCharacters(search: string, page: number): Promise<ContentI> {
+async function getCharacters(
+  search: string,
+  page: number,
+  abortController: AbortController
+): Promise<ContentI> {
   const res: Response = await fetch(
     `https://rickandmortyapi.com/api/character/?page=${page}${
       search === '' ? '' : `&name=${search}`
     }`,
     {
       method: 'GET',
+      signal: abortController.signal,
       headers: {
         'Content-Type': 'application/json',
       },

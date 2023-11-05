@@ -11,66 +11,90 @@ import { Card } from './Card/Card';
 import { Pagination } from './pagination/Pagination';
 
 interface ContentP {
-  search: string;
-  onNumberPage: (numberPage: number) => void;
+  searchCharacter: string | null;
+  onNumberPage: (numberPage: string) => void;
+  searchPage: number | null;
 }
 
-const Content = ({ search, onNumberPage }: ContentP) => {
+const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
   const [content, setContent] = useState<ContentI | null>(null);
-  const [page, setPage] = useState<number>(1);
+  const [countItems, setCountItems] = useState<number>(20);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log('useEffect1');
-    sendPageNumber(1);
     setLoading(true);
-    requestServer();
-  }, [search]);
-
-  useEffect(() => {
-    console.log('useEffect2');
-    setLoading(true);
-    requestServer(page);
-  }, [page]);
+    const abortController = new AbortController();
+    if (searchPage || searchCharacter) {
+      getCharacters(
+        searchCharacter ?? localStorage.getItem(SEARCH_VALUE) ?? '',
+        countItems === 10
+          ? Math.ceil((searchPage as number) / 2)
+          : searchPage ?? 1,
+        abortController
+      )
+        .then((result) => setContent(result))
+        .then(() => setLoading(false));
+    }
+  }, [searchPage, searchCharacter, countItems]);
 
   if (loading) {
     return <Loader />;
   }
 
-  function requestServer(numberPage: number = 1) {
-    getCharacters(localStorage.getItem(SEARCH_VALUE) ?? '', numberPage)
-      .then((result) => setContent(result))
-      .then(() => setLoading(false));
-  }
-
-  function sendPageNumber(numberPage: number) {
-    setPage(numberPage);
-    onNumberPage(numberPage);
+  function sendPageNumber(page: number) {
+    if (searchPage) {
+      onNumberPage(page.toString());
+    }
   }
 
   return (
     <main className={classes.container}>
       <div className={classes.containerCard}>
         {content?.results ? (
-          content.results.map((characterInfo) => {
-            const { id, image, name, species, gender } = characterInfo;
-            return (
-              <Card
-                key={id}
-                id={id}
-                image={image}
-                name={name}
-                species={species}
-                gender={gender}
-              />
-            );
-          })
+          content.results
+            .filter((_, index) =>
+              countItems === 10
+                ? (searchPage as number) % 2 === 1
+                  ? index < 10
+                  : index >= 10
+                : index < 21
+            )
+            .map((characterInfo) => {
+              const { id, image, name, species, gender } = characterInfo;
+              return (
+                <Card
+                  key={id}
+                  id={id}
+                  image={image}
+                  name={name}
+                  species={species}
+                  gender={gender}
+                />
+              );
+            })
         ) : (
           <p>{NOT_FOUNDED_MESSAGE}</p>
         )}
       </div>
+      <div className={classes.containerSelect}>
+        <p>Сколько элементов отображать на странице</p>
+        <select
+          name="selectItems"
+          onChange={(event) => setCountItems(Number(event.target.value))}
+          defaultValue={countItems}
+        >
+          <option value="20">20</option>
+          <option value="10">10</option>
+        </select>
+      </div>
       <span className={classes.containerPages}>
-        {[...new Array(content?.info.pages)].map((_, index) => {
+        {[
+          ...new Array(
+            countItems === 20
+              ? content?.info.pages
+              : Math.ceil((content?.info.count as number) / 10)
+          ),
+        ].map((_, index) => {
           return (
             <Pagination
               key={index}
