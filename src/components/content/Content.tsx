@@ -1,6 +1,6 @@
 import classes from './Content.module.css';
 import React, { useEffect, useState } from 'react';
-import getCharacters from '../../api/api';
+import { Outlet } from 'react-router-dom';
 import {
   ContentI,
   NOT_FOUNDED_MESSAGE,
@@ -9,6 +9,7 @@ import {
 import { Loader } from '../loader/Loader';
 import { Card } from './Card/Card';
 import { Pagination } from './pagination/Pagination';
+import { getCharacters } from '../../api/api';
 
 interface ContentP {
   searchCharacter: string | null;
@@ -47,6 +48,8 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
     }
   }
 
+  console.log(content?.results);
+
   return (
     <main className={classes.container}>
       <div className={classes.containerCard}>
@@ -80,7 +83,10 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
         <p>Сколько элементов отображать на странице</p>
         <select
           name="selectItems"
-          onChange={(event) => setCountItems(Number(event.target.value))}
+          onChange={(event) => {
+            setCountItems(Number(event.target.value));
+            onNumberPage('1');
+          }}
           defaultValue={countItems}
         >
           <option value="20">20</option>
@@ -91,7 +97,7 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
         {[
           ...new Array(
             countItems === 20
-              ? content?.info.pages
+              ? content?.info?.pages
               : Math.ceil((content?.info.count as number) / 10)
           ),
         ].map((_, index) => {
@@ -104,6 +110,7 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
           );
         })}
       </span>
+      <Outlet />
     </main>
   );
 };

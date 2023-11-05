@@ -1,4 +1,4 @@
-import { ContentI } from '../models/models';
+import { CharacterI, ContentI } from '../models/models';
 
 async function getCharacters(
   search: string,
@@ -20,4 +20,17 @@ async function getCharacters(
   return await res.json();
 }
 
-export default getCharacters;
+async function getCharacterDetails(id: number): Promise<CharacterI> {
+  const res: Response = await fetch(
+    `https://rickandmortyapi.com/api/character/${id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  return await res.json();
+}
+
+export { getCharacters, getCharacterDetails };
