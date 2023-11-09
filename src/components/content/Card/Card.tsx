@@ -6,9 +6,17 @@ interface CardPropsI {
   species: string;
   name: string;
   gender: string;
+  onClickHandler: () => void;
 }
 
-const Card = ({ id, image, species, gender, name }: CardPropsI) => {
+const Card = ({
+  id,
+  image,
+  species,
+  gender,
+  name,
+  onClickHandler,
+}: CardPropsI) => {
   return (
     <div key={id}>
       <img src={image} alt={'изображения персонажа'}></img>
@@ -16,6 +24,7 @@ const Card = ({ id, image, species, gender, name }: CardPropsI) => {
       <h3>short description</h3>
       <p>gender: {gender}</p>
       <p>species: {species}</p>
+      <button onClick={onClickHandler}>подробнее</button>
     </div>
   );
 };

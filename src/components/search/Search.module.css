@@ -1,9 +1,14 @@
+body {
+  margin: 0;
+}
+
 .searchArea {
   height: 150px;
   background-color: greenyellow;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
 }
 
 .searchForm {

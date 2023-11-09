@@ -32,7 +32,7 @@ const Search = ({ onSendSearch }: SearchI) => {
     throw new Error('crashed!');
   }
   return (
-    <header className={classes.searchArea}>
+    <div className={classes.searchArea}>
       <form className={classes.searchForm} onSubmit={onSubmitHandler}>
         <input
           defaultValue={localStorage.getItem(SEARCH_VALUE) ?? ''}
@@ -53,7 +53,7 @@ const Search = ({ onSendSearch }: SearchI) => {
           onClick={onErrorSubmit}
         />
       </form>
-    </header>
+    </div>
   );
 };
 

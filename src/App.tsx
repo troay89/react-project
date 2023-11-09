@@ -1,10 +1,9 @@
-import { ErrorBoundary } from './components/error/ErrorBoundary';
 import { Search } from './components/search/Search';
 import { Content } from './components/content/Content';
-import { useSearchParams } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
-export default function App() {
+const App = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const searchCharacter = searchParams.get('character');
@@ -30,13 +29,16 @@ export default function App() {
   };
 
   return (
-    <ErrorBoundary>
+    <>
       <Search onSendSearch={sendSearch} />
       <Content
         searchCharacter={searchCharacter}
         onNumberPage={sendNumberPage}
         searchPage={Number(searchPage)}
       />
-    </ErrorBoundary>
+      <Outlet />
+    </>
   );
-}
+};
+
+export { App };

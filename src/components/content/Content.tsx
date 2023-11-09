@@ -1,6 +1,6 @@
 import classes from './Content.module.css';
 import React, { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   ContentI,
   NOT_FOUNDED_MESSAGE,
@@ -21,6 +21,7 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
   const [content, setContent] = useState<ContentI | null>(null);
   const [countItems, setCountItems] = useState<number>(20);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -38,8 +39,8 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
     }
   }, [searchPage, searchCharacter, countItems]);
 
-  if (loading) {
-    return <Loader />;
+  function onDetailsCard(id: number) {
+    navigate(`details/${id}?page=${searchPage}&character=${searchCharacter}`);
   }
 
   function sendPageNumber(page: number) {
@@ -48,7 +49,9 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
     }
   }
 
-  console.log(content?.results);
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <main className={classes.container}>
@@ -72,6 +75,7 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
                   name={name}
                   species={species}
                   gender={gender}
+                  onClickHandler={() => onDetailsCard(id)}
                 />
               );
             })
@@ -110,7 +114,6 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
           );
         })}
       </span>
-      <Outlet />
     </main>
   );
 };

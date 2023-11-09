@@ -4,7 +4,7 @@ import classes from './Loader.module.css';
 const Loader = () => {
   return (
     <div className={classes.loading}>
-      <FaSpinner className={classes.spinner} />
+      <FaSpinner className={`${classes.spinner} ${classes.loading}`} />
       <span>Loading...</span>
     </div>
   );

@@ -20,7 +20,7 @@ async function getCharacters(
   return await res.json();
 }
 
-async function getCharacterDetails(id: number): Promise<CharacterI> {
+async function getCharacterDetails(id: string): Promise<CharacterI> {
   const res: Response = await fetch(
     `https://rickandmortyapi.com/api/character/${id}`,
     {
