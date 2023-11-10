@@ -56,11 +56,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "prepush-if-changed"
+      "pre-commit": "npm run test",
+      "pre-push": "npm run test"
     }
-  },
-  "prepush-if-changed": {
-    "src/components/**/*.{ts,tsx}": "npm run test",
-    "src/components/content/**/*.{ts,tsx}": "npm run test"
   }
 }
