@@ -17,6 +17,7 @@
     "coverage": "yarn test --coverage --watchAll --collectCoverageFrom='src/components/**/*.{ts,tsx}' --collectCoverageFrom='src/components/content/**/*.{ts,tsx}' --collectCoverageFrom='!src/components/**/{ErrorBoundary,Loader}.{ts,tsx}'"
   },
   "dependencies": {
+    "prepush-if-changed": "^1.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
@@ -52,5 +53,13 @@
     "ts-jest": "^29.1.1",
     "typescript": "^5.0.2",
     "vite": "^4.4.8"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "prepush-if-changed"
+    }
+  },
+  "prepush-if-changed": {
+    "src/components/**/*.tsx": "npm run test"
   }
 }
