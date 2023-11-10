@@ -1,16 +1,14 @@
 import classes from './Search.module.css';
 import React, { useState } from 'react';
 import { SEARCH_VALUE } from '../../models/models';
+import { useDate } from '../../context/context';
 
-interface SearchI {
-  onSendSearch: (search: string) => void;
-}
-
-const Search = ({ onSendSearch }: SearchI) => {
+const Search = () => {
+  const [count, setCount] = useState<number>(0);
   const [inputSearch, setInputSearch] = useState<string>(
     localStorage.getItem(SEARCH_VALUE) ?? ''
   );
-  const [count, setCount] = useState<number>(0);
+  const data = useDate();
 
   function onErrorSubmit() {
     setCount(1);
@@ -18,15 +16,15 @@ const Search = ({ onSendSearch }: SearchI) => {
 
   function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    saveSearchValue(inputSearch ?? localStorage.getItem(SEARCH_VALUE) ?? '');
-    onSendSearch(inputSearch ?? '');
+    data?.sendSearch(inputSearch);
+    saveSearchValue(
+      data?.searchCharacter ?? localStorage.getItem(SEARCH_VALUE) ?? ''
+    );
   }
 
   function saveSearchValue(searchValue: string) {
     localStorage.setItem(SEARCH_VALUE, searchValue.trim());
   }
-
-  console.log(inputSearch, 'Search');
 
   if (count === 1) {
     throw new Error('crashed!');
@@ -39,7 +37,9 @@ const Search = ({ onSendSearch }: SearchI) => {
           className={classes.searchInput}
           type={'search'}
           placeholder={'Введите сюда имя персонажа которого хотите найти'}
-          onChange={(event) => setInputSearch(event.target.value)}
+          onChange={(event) => {
+            setInputSearch(event.target.value);
+          }}
         />
         <input
           className={classes.searchButton}

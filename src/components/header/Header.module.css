@@ -1,9 +1,9 @@
 .headerContainer {
-    display: flex;
-    justify-content: center;
-    background-color: cornflowerblue;
+  display: flex;
+  justify-content: center;
+  background-color: cornflowerblue;
 }
 
 .title {
-    color: burlywood;
+  color: burlywood;
 }

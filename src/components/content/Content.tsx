@@ -1,27 +1,22 @@
 import classes from './Content.module.css';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  ContentI,
-  NOT_FOUNDED_MESSAGE,
-  SEARCH_VALUE,
-} from '../../models/models';
+import { NOT_FOUNDED_MESSAGE, SEARCH_VALUE } from '../../models/models';
 import { Loader } from '../loader/Loader';
-import { Card } from './Card/Card';
 import { Pagination } from './pagination/Pagination';
 import { getCharacters } from '../../api/api';
+import { AuthContextProps, useDate } from '../../context/context';
+import { Card } from './Card/Card';
 
-interface ContentP {
-  searchCharacter: string | null;
-  onNumberPage: (numberPage: string) => void;
-  searchPage: number | null;
-}
-
-const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
-  const [content, setContent] = useState<ContentI | null>(null);
+const Content = () => {
   const [countItems, setCountItems] = useState<number>(20);
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
+
+  const { searchPage, searchCharacter, setContent, content, sendNumberPage } =
+    useDate() as AuthContextProps;
+
+  console.log(1, 'render');
 
   useEffect(() => {
     setLoading(true);
@@ -30,22 +25,22 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
       getCharacters(
         searchCharacter ?? localStorage.getItem(SEARCH_VALUE) ?? '',
         countItems === 10
-          ? Math.ceil((searchPage as number) / 2)
-          : searchPage ?? 1,
+          ? Math.ceil((Number(searchPage) as number) / 2)
+          : Number(searchPage) ?? 1,
         abortController
       )
         .then((result) => setContent(result))
         .then(() => setLoading(false));
     }
-  }, [searchPage, searchCharacter, countItems]);
+  }, [countItems, searchCharacter, searchPage, setContent]);
 
   function onDetailsCard(id: number) {
-    navigate(`details/${id}?page=${searchPage}&character=${searchCharacter}`);
+    navigate(`details/${id}?character=${searchCharacter}&page=${searchPage}`);
   }
 
   function sendPageNumber(page: number) {
     if (searchPage) {
-      onNumberPage(page.toString());
+      sendNumberPage(page.toString());
     }
   }
 
@@ -60,7 +55,7 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
           content.results
             .filter((_, index) =>
               countItems === 10
-                ? (searchPage as number) % 2 === 1
+                ? Number(searchPage) % 2 === 1
                   ? index < 10
                   : index >= 10
                 : index < 21
@@ -89,7 +84,7 @@ const Content = ({ searchCharacter, onNumberPage, searchPage }: ContentP) => {
           name="selectItems"
           onChange={(event) => {
             setCountItems(Number(event.target.value));
-            onNumberPage('1');
+            sendNumberPage('1');
           }}
           defaultValue={countItems}
         >
