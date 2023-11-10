@@ -24,6 +24,7 @@ const Card = ({
       <h3>short description</h3>
       <p>gender: {gender}</p>
       <p>species: {species}</p>
+      <p>species: {species}</p>
       <button onClick={onClickHandler}>подробнее</button>
     </div>
   );
