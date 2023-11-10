@@ -1,0 +1,60 @@
+import classes from './Search.module.css';
+import React, { useState } from 'react';
+import { SEARCH_VALUE } from '../../models/models';
+
+interface SearchI {
+  onSendSearch: (search: string) => void;
+}
+
+const Search = ({ onSendSearch }: SearchI) => {
+  const [inputSearch, setInputSearch] = useState<string>(
+    localStorage.getItem(SEARCH_VALUE) ?? ''
+  );
+  const [count, setCount] = useState<number>(0);
+
+  function onErrorSubmit() {
+    setCount(1);
+  }
+
+  function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    saveSearchValue(inputSearch ?? localStorage.getItem(SEARCH_VALUE) ?? '');
+    onSendSearch(inputSearch ?? '');
+  }
+
+  function saveSearchValue(searchValue: string) {
+    localStorage.setItem(SEARCH_VALUE, searchValue.trim());
+  }
+
+  console.log(inputSearch, 'Search');
+
+  if (count === 1) {
+    throw new Error('crashed!');
+  }
+  return (
+    <div className={classes.searchArea}>
+      <form className={classes.searchForm} onSubmit={onSubmitHandler}>
+        <input
+          defaultValue={localStorage.getItem(SEARCH_VALUE) ?? ''}
+          className={classes.searchInput}
+          type={'search'}
+          placeholder={'Введите сюда имя персонажа которого хотите найти'}
+          onChange={(event) => setInputSearch(event.target.value)}
+        />
+        <input
+          className={classes.searchButton}
+          type={'submit'}
+          value={'НАЙТИ'}
+        />
+        <input
+          className={classes.searchButton}
+          type={'button'}
+          value={'Ошибка'}
+          onClick={onErrorSubmit}
+        />
+      </form>
+    </div>
+  );
+};
+
+export { Search };
