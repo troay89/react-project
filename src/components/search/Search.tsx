@@ -1,18 +1,20 @@
 import classes from './Search.module.css';
-import React, { useState } from 'react';
+import { useCustomSelector, useCustomDispatch } from '../../redux/store/hooks';
 import { SEARCH_VALUE } from '../../models/models';
-import { useDate } from '../../context/context';
+import React, { useState } from 'react';
+import { changeSearch } from '../../redux/features/search/searchSlice';
 
 const Search = () => {
   const [inputSearch, setInputSearch] = useState<string>(
     localStorage.getItem(SEARCH_VALUE) ?? ''
   );
-  const data = useDate();
+  useCustomSelector((state) => state.search.searchString);
+  const dispatch = useCustomDispatch();
 
   function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (inputSearch || localStorage.getItem(SEARCH_VALUE)) {
-      data?.sendSearch(inputSearch);
+      dispatch(changeSearch(inputSearch));
       localStorage.setItem(
         SEARCH_VALUE,
         inputSearch ?? localStorage.getItem(SEARCH_VALUE)

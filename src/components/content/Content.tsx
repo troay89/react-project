@@ -1,80 +1,81 @@
 import classes from './Content.module.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NOT_FOUNDED_MESSAGE, SEARCH_VALUE } from '../../models/models';
-import { Loader } from '../loader/Loader';
+import { NOT_FOUNDED_MESSAGE } from '../../models/models';
 import { Pagination } from './pagination/Pagination';
-import { getCharacters } from '../../api/api';
-import { AuthContextProps, useDate } from '../../context/context';
 import { Card } from './Card/Card';
+import { postAPI } from '../../api/apiRedux';
+import { useCustomSelector } from '../../redux/store/hooks';
+import { Loader } from '../loader/Loader';
 
 const Content = () => {
   const [countItems, setCountItems] = useState<number>(20);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
+  const searchString = useCustomSelector((state) => state.search.searchString);
 
-  const { searchPage, searchCharacter, setContent, content, sendNumberPage } =
-    useDate() as AuthContextProps;
+  const {
+    data: characters,
+    error,
+    isLoading,
+  } = postAPI.useFetchAllPostsQuery({ page: page, search: searchString });
 
-  useEffect(() => {
-    setLoading(true);
-    const abortController = new AbortController();
-    if (searchPage || searchCharacter) {
-      getCharacters(
-        searchCharacter ?? localStorage.getItem(SEARCH_VALUE) ?? '',
-        countItems === 10
-          ? Math.ceil((Number(searchPage) as number) / 2)
-          : Number(searchPage) ?? 1,
-        abortController
-      )
-        .then((result) => setContent(result))
-        .then(() => setLoading(false));
-    }
-  }, [countItems, searchCharacter, searchPage, setContent]);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const abortController = new AbortController();
+  //   if (searchPage || searchCharacter) {
+  //     getCharacters(
+  //       searchCharacter ?? localStorage.getItem(SEARCH_VALUE) ?? '',
+  //       countItems === 10
+  //         ? Math.ceil((Number(searchPage) as number) / 2)
+  //         : Number(searchPage) ?? 1,
+  //       abortController
+  //     )
+  //       .then((result) => setContent(result))
+  //       .then(() => setLoading(false));
+  //   }
+  // }, [countItems, searchCharacter, searchPage, setContent]);
 
   function onDetailsCard(id: number) {
-    navigate(`details/${id}?character=${searchCharacter}&page=${searchPage}`);
+    navigate(`details/${id}?character=${searchString}&page=${page}`);
   }
 
   function sendPageNumber(page: number) {
-    if (searchPage) {
-      sendNumberPage(page.toString());
-    }
+    setPage(page);
   }
 
-  if (loading) {
+  if (isLoading) {
     return <Loader />;
   }
 
   return (
     <main className={classes.container}>
       <div className={classes.containerCard} role={'characterList'}>
-        {content?.results ? (
-          content.results
-            .filter((_, index) =>
-              countItems === 10
-                ? Number(searchPage) % 2 === 1
-                  ? index < 10
-                  : index >= 10
-                : index < 21
-            )
-            .map((characterInfo) => {
-              const { id, image, name, species, gender } = characterInfo;
-              return (
-                <Card
-                  key={id}
-                  id={id}
-                  image={image}
-                  name={name}
-                  species={species}
-                  gender={gender}
-                  onClickHandler={() => onDetailsCard(id)}
-                />
-              );
-            })
-        ) : (
-          <p>{NOT_FOUNDED_MESSAGE}</p>
-        )}
+        {!isLoading && error ? <p>{NOT_FOUNDED_MESSAGE}</p> : null}
+        {!isLoading && !error
+          ? characters?.results
+              .filter((_, index) =>
+                countItems === 10
+                  ? Number(1) % 2 === 1
+                    ? index < 10
+                    : index >= 10
+                  : index < 21
+              )
+              .map((characterInfo) => {
+                const { id, image, name, species, gender } = characterInfo;
+                return (
+                  <Card
+                    key={id}
+                    id={id}
+                    image={image}
+                    name={name}
+                    species={species}
+                    gender={gender}
+                    onClickHandler={() => onDetailsCard(id)}
+                  />
+                );
+              })
+          : null}
       </div>
       <div className={classes.containerSelect}>
         <p>Сколько элементов отображать на странице</p>
@@ -82,7 +83,7 @@ const Content = () => {
           name="selectItems"
           onChange={(event) => {
             setCountItems(Number(event.target.value));
-            sendNumberPage('1');
+            setPage(1);
           }}
           defaultValue={countItems}
         >
@@ -94,8 +95,8 @@ const Content = () => {
         {[
           ...new Array(
             countItems === 20
-              ? content?.info?.pages
-              : Math.ceil((content?.info?.count ?? 1) / 10)
+              ? characters?.info?.pages
+              : Math.ceil((characters?.info?.count ?? 1) / 10)
           ),
         ].map((_, index) => {
           return (
