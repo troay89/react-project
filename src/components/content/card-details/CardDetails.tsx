@@ -25,6 +25,7 @@ const CardDetails = () => {
       <div className={classes.square}>
         <FaWindowClose
           className={classes.windowClose}
+          role={'windowClose'}
           color={'red'}
           cursor={'pointer'}
           onClick={onClose}

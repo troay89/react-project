@@ -1,7 +1,11 @@
-import '@testing-library/jest-dom';
-import { server } from '../__mocks__/file-mock';
+import { handlers } from '../__mocks__/handlers';
+import { setupServer } from 'msw/node';
 
 beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
+afterAll(() => {
+  server.resetHandlers();
+});
 
 afterAll(() => server.close());
+
+export const server = setupServer(...handlers);

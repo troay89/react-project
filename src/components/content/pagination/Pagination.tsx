@@ -7,7 +7,11 @@ interface PaginationI {
 
 const Pagination = ({ numberPage, onSelectPage }: PaginationI) => {
   return (
-    <span className={classes.page} onClick={() => onSelectPage(numberPage)}>
+    <span
+      className={classes.page}
+      role={'page21'}
+      onClick={() => onSelectPage(numberPage)}
+    >
       {numberPage}
     </span>
   );

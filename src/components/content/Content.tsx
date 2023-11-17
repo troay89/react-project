@@ -16,8 +16,6 @@ const Content = () => {
   const { searchPage, searchCharacter, setContent, content, sendNumberPage } =
     useDate() as AuthContextProps;
 
-  console.log(1, 'render');
-
   useEffect(() => {
     setLoading(true);
     const abortController = new AbortController();
@@ -50,7 +48,7 @@ const Content = () => {
 
   return (
     <main className={classes.container}>
-      <div className={classes.containerCard}>
+      <div className={classes.containerCard} role={'characterList'}>
         {content?.results ? (
           content.results
             .filter((_, index) =>
@@ -92,12 +90,12 @@ const Content = () => {
           <option value="10">10</option>
         </select>
       </div>
-      <span className={classes.containerPages}>
+      <span className={classes.containerPages} role={'containerPages'}>
         {[
           ...new Array(
             countItems === 20
               ? content?.info?.pages
-              : Math.ceil((content?.info.count as number) / 10)
+              : Math.ceil((content?.info?.count ?? 1) / 10)
           ),
         ].map((_, index) => {
           return (

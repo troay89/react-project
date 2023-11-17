@@ -23,5 +23,10 @@ module.exports = {
       path.join('__mocks__', 'file-mock.ts'),
     '\\.module.(css)$': 'identity-obj-proxy',
   },
+  setupFiles: ['./jest.pollyfills.ts'],
+  setupFilesAfterEnv: ['./src/setupTests.ts'],
   testMatch: ['<rootDir>/src/**/*(*.)@(spec|test).[tj]s?(x)'],
+  testEnvironmentOptions: {
+    customExportConditions: [''],
+  },
 };
