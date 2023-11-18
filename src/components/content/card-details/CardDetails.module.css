@@ -26,3 +26,9 @@
   right: 0;
   left: 0;
 }
+
+.containerLoader {
+  position: fixed;
+  right: 100px;
+  top: 200px;
+}

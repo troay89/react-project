@@ -2,7 +2,6 @@ import { render, screen, cleanup } from '../../../test/test-utils';
 import { Search } from './Search';
 import user from '@testing-library/user-event';
 import { SEARCH_VALUE } from '../../models/models';
-// import { cleanup } from '@testing-library/react';
 
 cleanup();
 

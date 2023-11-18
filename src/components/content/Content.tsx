@@ -23,6 +23,7 @@ const Content = () => {
     data: characters,
     error,
     isLoading,
+    isFetching,
   } = postAPI.useFetchAllPostsQuery({
     page: showItems === 10 ? Math.ceil(page / 2) : page ?? 1,
     search: searchString,
@@ -33,15 +34,14 @@ const Content = () => {
       'character',
       searchString ? searchString : localStorage.getItem(SEARCH_VALUE) ?? ''
     );
-    searchParams.set('page', page.toString());
+    searchParams.set('page', page ? page.toString() : '1');
     setSearchParams(searchParams);
-  }, [page, searchParams, searchString, setSearchParams]);
+  }, [page, searchString]);
 
   useEffect(() => {
     dispatch(pageNumber(queryPage));
   }, []);
 
-  console.log('context');
   function onDetailsCard(id: number) {
     navigate(`details/${id}?character=${searchString}&page=${page}`);
   }
@@ -50,7 +50,7 @@ const Content = () => {
     dispatch(pageNumber(page));
   }
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return <Loader />;
   }
 
