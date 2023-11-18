@@ -4,7 +4,6 @@ import { SEARCH_VALUE } from '../../models/models';
 import React, { useEffect, useState } from 'react';
 import { changeSearch } from '../../redux/features/search/searchSlice';
 import { useSearchParams } from 'react-router-dom';
-import { pageNumber } from '../../redux/features/page/pageSlice';
 
 const Search = () => {
   const [inputSearch, setInputSearch] = useState<string>(
@@ -22,7 +21,6 @@ const Search = () => {
   function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     dispatch(changeSearch(inputSearch));
-    dispatch(pageNumber(1));
     localStorage.setItem(
       SEARCH_VALUE,
       inputSearch ?? querySearch ?? localStorage.getItem(SEARCH_VALUE)

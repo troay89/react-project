@@ -2,12 +2,15 @@ import { render, type RenderOptions } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from '../src/context/context';
+import { Provider } from 'react-redux';
+import { setupStore } from '../src/redux/store/store';
+
+const store = setupStore();
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <BrowserRouter>
-      <AuthProvider>{children}</AuthProvider>
+      <Provider store={store}>{children}</Provider>
     </BrowserRouter>
   );
 };

@@ -89,7 +89,6 @@ const Content = () => {
           name="selectItems"
           onChange={(event) => {
             dispatch(countItems(Number(event.target.value)));
-            dispatch(pageNumber(1));
           }}
           defaultValue={showItems}
         >
