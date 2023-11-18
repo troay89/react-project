@@ -23,7 +23,7 @@ describe('Search', () => {
       name: /найти/i,
     });
     await user.click(searchButton);
-    expect(localStorage.getItem(SEARCH_VALUE)).toBe(null);
+    expect(localStorage.getItem(SEARCH_VALUE)).toBe('');
     const searchInput = await screen.findByRole('searchbox');
     expect(searchInput).toHaveAttribute('value', '');
   });

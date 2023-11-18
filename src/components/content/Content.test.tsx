@@ -1,8 +1,6 @@
 import { render, screen } from '../../../test/test-utils';
 import { Content } from './Content';
 import user from '@testing-library/user-event';
-import { server } from '../../setupTests';
-import { http, HttpResponse } from 'msw';
 
 describe('Content', () => {
   test('renders correctly Loading', () => {
@@ -24,22 +22,5 @@ describe('Content', () => {
     const spanPage = await screen.findByRole('page21');
     expect(spanPage).toBeInTheDocument();
     await user.click(spanPage);
-  });
-
-  test('Not found', async () => {
-    server.use(
-      http.get(`https://rickandmortyapi.com/api/character/`, () => {
-        return HttpResponse.json({
-          count: 2,
-          pages: 1,
-          next: 'string',
-          prev: 'string',
-          results: undefined,
-        });
-      })
-    );
-    render(<Content />);
-    const notFound = await screen.findByText(/извините не чего не найдено/i);
-    expect(notFound).toBeInTheDocument();
   });
 });

@@ -21,19 +21,14 @@ const Search = () => {
   function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     dispatch(changeSearch(inputSearch));
-    localStorage.setItem(
-      SEARCH_VALUE,
-      inputSearch ?? querySearch ?? localStorage.getItem(SEARCH_VALUE)
-    );
+    localStorage.setItem(SEARCH_VALUE, inputSearch);
   }
 
   return (
     <div className={classes.searchArea}>
       <form className={classes.searchForm} onSubmit={onSubmitHandler}>
         <input
-          defaultValue={
-            querySearch ? querySearch : localStorage.getItem(SEARCH_VALUE) ?? ''
-          }
+          defaultValue={localStorage.getItem(SEARCH_VALUE) ?? ''}
           className={classes.searchInput}
           type={'search'}
           placeholder={'Введите сюда имя персонажа которого хотите найти'}
