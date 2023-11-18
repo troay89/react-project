@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: rebeccapurple;
+}
+
+.containerCard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 20px;
+  max-width: 1850px;
+  margin: auto;
+}
+
+.containerPages {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  height: auto;
+  max-width: 1440px;
+  margin: auto;
+}
+
+.containerSelect {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+}
+
+.containerSelect p {
+  color: whitesmoke;
+  font-size: 20px;
+}
