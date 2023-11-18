@@ -1,13 +1,9 @@
 import classes from './CardDetails.module.css';
 import { useNavigate, useParams } from 'react-router';
-import React, { useEffect } from 'react';
-import { getCharacterDetails } from '../../../api/api';
 import { FaWindowClose } from 'react-icons/fa';
-import { AuthContextProps, useDate } from '../../../context/context';
+import { postAPI } from '../../../api/apiRedux';
 
 const CardDetails = () => {
-  const { setContentCharacter, contentCharacter } =
-    useDate() as AuthContextProps;
   const navigate = useNavigate();
   const id: string = useParams().id || '';
 
@@ -15,9 +11,11 @@ const CardDetails = () => {
     navigate(-1);
   }
 
-  useEffect(() => {
-    getCharacterDetails(id).then((result) => setContentCharacter(result));
-  }, [id, setContentCharacter]);
+  const {
+    data: character,
+    // error,
+    // isLoading,
+  } = postAPI.useFetchCharacterQuery(id);
 
   return (
     <>
@@ -30,10 +28,10 @@ const CardDetails = () => {
           cursor={'pointer'}
           onClick={onClose}
         />
-        <h3>{contentCharacter?.name}</h3>
-        <img src={contentCharacter?.image} alt={'character'} />
-        <p>species: {contentCharacter?.species}</p>
-        <p>gender: {contentCharacter?.gender}</p>
+        <h3>{character?.name}</h3>
+        <img src={character?.image} alt={'character'} />
+        <p>species: {character?.species}</p>
+        <p>gender: {character?.gender}</p>
       </div>
     </>
   );

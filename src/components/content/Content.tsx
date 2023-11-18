@@ -5,14 +5,16 @@ import { NOT_FOUNDED_MESSAGE } from '../../models/models';
 import { Pagination } from './pagination/Pagination';
 import { Card } from './Card/Card';
 import { postAPI } from '../../api/apiRedux';
-import { useCustomSelector } from '../../redux/store/hooks';
+import { useCustomDispatch, useCustomSelector } from '../../redux/store/hooks';
 import { Loader } from '../loader/Loader';
+import { countItems } from '../../redux/features/count-items/countItems';
 
 const Content = () => {
-  const [countItems, setCountItems] = useState<number>(20);
   const [page, setPage] = useState<number>(1);
   const navigate = useNavigate();
   const searchString = useCustomSelector((state) => state.search.searchString);
+  const showItems = useCustomSelector((state) => state.itemsPage.countItems);
+  const dispatch = useCustomDispatch();
 
   const {
     data: characters,
@@ -55,7 +57,7 @@ const Content = () => {
         {!isLoading && !error
           ? characters?.results
               .filter((_, index) =>
-                countItems === 10
+                showItems === 10
                   ? Number(1) % 2 === 1
                     ? index < 10
                     : index >= 10
@@ -82,10 +84,10 @@ const Content = () => {
         <select
           name="selectItems"
           onChange={(event) => {
-            setCountItems(Number(event.target.value));
+            dispatch(countItems(Number(event.target.value)));
             setPage(1);
           }}
-          defaultValue={countItems}
+          defaultValue={showItems}
         >
           <option value="20">20</option>
           <option value="10">10</option>
@@ -94,7 +96,7 @@ const Content = () => {
       <span className={classes.containerPages} role={'containerPages'}>
         {[
           ...new Array(
-            countItems === 20
+            showItems === 20
               ? characters?.info?.pages
               : Math.ceil((characters?.info?.count ?? 1) / 10)
           ),

@@ -1,16 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import searchReducer from '../features/search/searchSlice';
 import { postAPI } from '../../api/apiRedux';
-
-// const store = configureStore({
-//   reducer: {
-//     search: searchReducer,
-//     [postAPI.reducerPath]: postAPI.reducer,
-//   },
-// });
+import countItemsReducer from '../features/count-items/countItems';
 
 const rootReducer = combineReducers({
   search: searchReducer,
+  itemsPage: countItemsReducer,
   [postAPI.reducerPath]: postAPI.reducer,
 });
 
@@ -21,10 +16,6 @@ export const setupStore = () => {
       getDefaultMiddleware().concat(postAPI.middleware),
   });
 };
-
-// export default store;
-// export type RootState = ReturnType<typeof store.getState>;
-// export type AppDispatch = typeof store.dispatch;
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;

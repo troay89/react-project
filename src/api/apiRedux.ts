@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
-import { ContentI } from '../models/models';
+import { CharacterI, ContentI } from '../models/models';
 
 interface QueriesP {
   page: number;
@@ -18,6 +18,11 @@ export const postAPI = createApi({
           page: page,
           name: search,
         },
+      }),
+    }),
+    fetchCharacter: build.query<CharacterI, string>({
+      query: (id) => ({
+        url: `/api/character/${id}`,
       }),
     }),
   }),
