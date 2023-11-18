@@ -1,11 +1,13 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import searchReducer from '../features/search/searchSlice';
 import { postAPI } from '../../api/apiRedux';
-import countItemsReducer from '../features/count-items/countItems';
+import countItemsReducer from '../features/count-items/countItemsSlice';
+import pageReducer from '../features/page/pageSlice';
 
 const rootReducer = combineReducers({
   search: searchReducer,
   itemsPage: countItemsReducer,
+  pageNumber: pageReducer,
   [postAPI.reducerPath]: postAPI.reducer,
 });
 

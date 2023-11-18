@@ -1,32 +1,41 @@
 import classes from './Search.module.css';
 import { useCustomSelector, useCustomDispatch } from '../../redux/store/hooks';
 import { SEARCH_VALUE } from '../../models/models';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { changeSearch } from '../../redux/features/search/searchSlice';
+import { useSearchParams } from 'react-router-dom';
+import { pageNumber } from '../../redux/features/page/pageSlice';
 
 const Search = () => {
   const [inputSearch, setInputSearch] = useState<string>(
     localStorage.getItem(SEARCH_VALUE) ?? ''
   );
+  const [searchParams] = useSearchParams();
   useCustomSelector((state) => state.search.searchString);
   const dispatch = useCustomDispatch();
+  const querySearch = searchParams.get('character') ?? '';
+
+  useEffect(() => {
+    dispatch(changeSearch(querySearch));
+  }, [dispatch, querySearch]);
 
   function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (inputSearch || localStorage.getItem(SEARCH_VALUE)) {
-      dispatch(changeSearch(inputSearch));
-      localStorage.setItem(
-        SEARCH_VALUE,
-        inputSearch ?? localStorage.getItem(SEARCH_VALUE)
-      );
-    }
+    dispatch(changeSearch(inputSearch));
+    dispatch(pageNumber(1));
+    localStorage.setItem(
+      SEARCH_VALUE,
+      inputSearch ?? querySearch ?? localStorage.getItem(SEARCH_VALUE)
+    );
   }
 
   return (
     <div className={classes.searchArea}>
       <form className={classes.searchForm} onSubmit={onSubmitHandler}>
         <input
-          defaultValue={localStorage.getItem(SEARCH_VALUE) ?? ''}
+          defaultValue={
+            querySearch ? querySearch : localStorage.getItem(SEARCH_VALUE) ?? ''
+          }
           className={classes.searchInput}
           type={'search'}
           placeholder={'Введите сюда имя персонажа которого хотите найти'}

@@ -1,49 +1,53 @@
 import classes from './Content.module.css';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { NOT_FOUNDED_MESSAGE } from '../../models/models';
+import React, { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { NOT_FOUNDED_MESSAGE, SEARCH_VALUE } from '../../models/models';
 import { Pagination } from './pagination/Pagination';
 import { Card } from './Card/Card';
 import { postAPI } from '../../api/apiRedux';
 import { useCustomDispatch, useCustomSelector } from '../../redux/store/hooks';
 import { Loader } from '../loader/Loader';
-import { countItems } from '../../redux/features/count-items/countItems';
+import { countItems } from '../../redux/features/count-items/countItemsSlice';
+import { pageNumber } from '../../redux/features/page/pageSlice';
 
 const Content = () => {
-  const [page, setPage] = useState<number>(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryPage = Number(searchParams.get('page'));
   const navigate = useNavigate();
   const searchString = useCustomSelector((state) => state.search.searchString);
   const showItems = useCustomSelector((state) => state.itemsPage.countItems);
+  const page = useCustomSelector((state) => state.pageNumber.pageNumber);
   const dispatch = useCustomDispatch();
 
   const {
     data: characters,
     error,
     isLoading,
-  } = postAPI.useFetchAllPostsQuery({ page: page, search: searchString });
+  } = postAPI.useFetchAllPostsQuery({
+    page: showItems === 10 ? Math.ceil(page / 2) : page ?? 1,
+    search: searchString,
+  });
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const abortController = new AbortController();
-  //   if (searchPage || searchCharacter) {
-  //     getCharacters(
-  //       searchCharacter ?? localStorage.getItem(SEARCH_VALUE) ?? '',
-  //       countItems === 10
-  //         ? Math.ceil((Number(searchPage) as number) / 2)
-  //         : Number(searchPage) ?? 1,
-  //       abortController
-  //     )
-  //       .then((result) => setContent(result))
-  //       .then(() => setLoading(false));
-  //   }
-  // }, [countItems, searchCharacter, searchPage, setContent]);
+  useEffect(() => {
+    searchParams.set(
+      'character',
+      searchString ? searchString : localStorage.getItem(SEARCH_VALUE) ?? ''
+    );
+    searchParams.set('page', page.toString());
+    setSearchParams(searchParams);
+  }, [page, searchParams, searchString, setSearchParams]);
 
+  useEffect(() => {
+    dispatch(pageNumber(queryPage));
+  }, []);
+
+  console.log('context');
   function onDetailsCard(id: number) {
     navigate(`details/${id}?character=${searchString}&page=${page}`);
   }
 
   function sendPageNumber(page: number) {
-    setPage(page);
+    dispatch(pageNumber(page));
   }
 
   if (isLoading) {
@@ -58,7 +62,7 @@ const Content = () => {
           ? characters?.results
               .filter((_, index) =>
                 showItems === 10
-                  ? Number(1) % 2 === 1
+                  ? page % 2 === 1
                     ? index < 10
                     : index >= 10
                   : index < 21
@@ -85,7 +89,7 @@ const Content = () => {
           name="selectItems"
           onChange={(event) => {
             dispatch(countItems(Number(event.target.value)));
-            setPage(1);
+            dispatch(pageNumber(1));
           }}
           defaultValue={showItems}
         >
