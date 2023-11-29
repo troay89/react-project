@@ -1,15 +1,17 @@
-import { Search } from './components/search/Search';
-import { Content } from './components/content/Content';
-import { Outlet } from 'react-router-dom';
+import './App.css';
+import { Link } from 'react-router-dom';
 
-const App = () => {
+function App() {
   return (
     <>
-      <Search />
-      <Content />
-      <Outlet />
+      <Link to={'/controlled'}>
+        <p>controlled components</p>
+      </Link>
+      <Link to={'/uncontrolled'}>
+        <p>uncontrolled components</p>
+      </Link>
     </>
   );
-};
+}
 
-export { App };
+export default App;
