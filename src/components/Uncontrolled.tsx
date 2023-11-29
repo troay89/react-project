@@ -8,6 +8,10 @@ const Uncontrolled = () => {
           <input className={'input'} type="text" name="name" />
         </label>
         <label className={'field'}>
+          name:
+          <input className={'input'} type="text" name="name" />
+        </label>
+        <label className={'field'}>
           age:
           <input className={'input'} type="number" name="age" />
         </label>
