@@ -26,16 +26,16 @@ const Controlled = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data: DataPerson) => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    const file = data.download[0] as Blob;
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      data.download = reader.result as string;
-      dispatch(setData(data));
-      navigate('/');
-    };
+    if (Array.isArray(data.download)) {
+      const file = data.download[0] as Blob;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        data.download = reader.result as string;
+        dispatch(setData(data));
+        navigate('/');
+      };
+    }
   };
 
   return (

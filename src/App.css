@@ -50,14 +50,22 @@
 .field {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   font-size: 24px;
-  column-gap: 20px;
+  column-gap: 50px;
 }
 
-/*.tittle {*/
-/*  font-size: 34px;*/
-/*}*/
+.field.gender {
+  align-items: flex-start;
+  width: 580px;
+
+}
+
+.radio-wrapper {
+ width: 355px;
+  display: flex;
+  justify-content: space-between;
+}
 
 .input {
   border-radius: 20px;
@@ -70,4 +78,26 @@
   max-width: 180px;
   height: 50px;
   margin-left: 220px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  text-align: left;
+}
+
+.wrapper-input {
+  height: 60px;
+  max-width: 360px;
+}
+
+.wrapper-input.large {
+  max-width: 589px;
+  display: flex;
+}
+
+.wrapper-input.checkbox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end
 }

@@ -7,6 +7,7 @@ interface DataPerson {
   country: string;
   gender: string;
   download: string | Blob[] | Blob;
+  agree: boolean;
 }
 
 export type { DataPerson };
