@@ -1,8 +1,8 @@
 import { useRoutes, type RouteObject } from 'react-router-dom';
-import App from '../App.tsx';
+import App from '../App';
 import React from 'react';
-import { Controlled } from '../components/Controlled.tsx';
-import { Uncontrolled } from '../components/Uncontrolled.tsx';
+import { Controlled } from '../components/Controlled';
+import { Uncontrolled } from '../components/Uncontrolled';
 
 const paths = {
   root: {

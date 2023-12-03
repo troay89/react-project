@@ -58,11 +58,10 @@
 .field.gender {
   align-items: flex-start;
   width: 580px;
-
 }
 
 .radio-wrapper {
- width: 355px;
+  width: 355px;
   display: flex;
   justify-content: space-between;
 }
@@ -99,5 +98,28 @@
 .wrapper-input.checkbox {
   display: flex;
   flex-direction: column;
-  align-items: flex-end
+  align-items: flex-end;
+}
+
+.password-strength-indicator {
+  height: 10px;
+  background-color: red;
+  transition: width 0.5s ease, background-color 0.5s ease;
+}
+
+.password-strength-indicator[style*="20%"] {
+  background-color: red;
+}
+
+.password-strength-indicator[style*="40%"] {
+  background-color: orange;
+}
+
+.password-strength-indicator[style*="60%"],
+.password-strength-indicator[style*="80%"] {
+  background-color: yellow;
+}
+
+.password-strength-indicator[style*="100%"] {
+  background-color: green;
 }

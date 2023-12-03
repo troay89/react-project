@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DataPerson } from '../../models/models.ts';
+import { DataPerson } from '../../models/models';
 
 const initialState: DataPerson = {
   username: '',
-  age: '',
+  age: 0,
   email: '',
   firstPassword: '',
   secondPassword: '',
   country: '',
   gender: '',
   download: '',
+  agree: false,
 };
 
 const dataPersonalSlice = createSlice({

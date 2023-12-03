@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import dataPersonalReducer from '../features/dataPersonalSlice.ts';
+import dataPersonalReducer from '../features/dataPersonalSlice';
 
 const store = configureStore({
   reducer: {

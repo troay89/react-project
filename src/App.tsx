@@ -1,6 +1,6 @@
 import './App.css';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from './redux/store/hooks.ts';
+import { useAppSelector } from './redux/store/hooks';
 
 function App() {
   const data = useAppSelector((state) => state.data);

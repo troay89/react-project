@@ -1,63 +1,13 @@
-import { FormEvent, useRef, useState } from 'react';
-import { DataPerson } from '../models/models.ts';
-import { setData } from '../redux/features/dataPersonalSlice.ts';
-import { useAppDispatch } from '../redux/store/hooks.ts';
+import { FormEvent, useEffect, useRef, useState } from 'react';
+import {
+  checkPasswordStrength,
+  DataPerson,
+  userSchema,
+} from '../models/models';
+import { setData } from '../redux/features/dataPersonalSlice';
+import { useAppDispatch } from '../redux/store/hooks';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
-import { object, string, number, mixed, boolean } from 'yup';
-
-const FILE_SIZE = 20000 * 1024;
-const SUPPORTED_FORMATS = ['image/jpeg', 'image/png'];
-
-const userSchema = object().shape({
-  username: string()
-    .required('Username is required')
-    .test(
-      'is-capital',
-      'Username must start with a capital letter',
-      (value) => {
-        if (!value) return true;
-        const firstLetter = value.charAt(0);
-        return firstLetter === firstLetter.toUpperCase();
-      }
-    ),
-  age: number()
-    .required('Age is required')
-    .positive('Age must be a positive number')
-    .integer('Age must be an integer'),
-  email: string()
-    .required('email is required')
-    .email('Email must be a valid email address'),
-  firstPassword: string()
-    .required('Password is required')
-    .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character'
-    ),
-  secondPassword: string()
-    .required('Password confirmation is required')
-    .test('passwords-match', 'Passwords must match', function (value) {
-      return this.parent.firstPassword === value;
-    }),
-  country: string().required('Country is required'),
-  gender: string().required('Gender is required'),
-  download: mixed()
-    .required('A file is required')
-    .test('isFileUploaded', 'No file uploaded', (value) => {
-      return value instanceof File;
-    })
-    .test('fileSize', 'File too large', (value) => {
-      if (!(value instanceof File)) return true;
-      return value.size <= FILE_SIZE;
-    })
-    .test('fileFormat', 'Unsupported Format', (value) => {
-      if (!(value instanceof File)) return true;
-      return SUPPORTED_FORMATS.includes(value.type);
-    }),
-  agree: boolean()
-    .required('to continue')
-    .oneOf([true], 'You must agree to continue'),
-});
 
 const Uncontrolled = () => {
   const refs = {
@@ -76,13 +26,20 @@ const Uncontrolled = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [password, setPassword] = useState<string>('');
+  const [passwordStrength, setPasswordStrength] = useState<number>(0);
+
+  useEffect(() => {
+    const strengthPassword = checkPasswordStrength(password);
+    setPasswordStrength(strengthPassword);
+  }, [password]);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
     const dataPerson: DataPerson = {
       username: refs.username.current?.value ?? '',
-      age: refs.age.current?.value ?? '',
+      age: Number(refs.age.current?.value) ?? 0,
       email: refs.email.current?.value ?? '',
       firstPassword: refs.firstPassword.current?.value ?? '',
       secondPassword: refs.secondPassword.current?.value ?? '',
@@ -152,7 +109,14 @@ const Uncontrolled = () => {
               name="passwords"
               autoComplete={'false'}
               ref={refs.firstPassword}
+              onChange={() => {
+                setPassword(refs.firstPassword.current?.value ?? '');
+              }}
             />
+            <div
+              className="password-strength-indicator"
+              style={{ width: `${passwordStrength * 20}%` }}
+            ></div>
             {errors.firstPassword && (
               <p className={'error'}>{errors.firstPassword}</p>
             )}
@@ -221,7 +185,7 @@ const Uncontrolled = () => {
           </div>
         </label>
         <label className={'field'}>
-          вы принимаете все правила?
+          you accept all the rules?
           <div className={'wrapper-input checkbox'}>
             <input type="checkbox" ref={refs.agree} />
             {errors.agree && <p className={'error'}>{errors.agree}</p>}
