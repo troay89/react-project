@@ -1,0 +1,161 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.field {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 24px;
+  column-gap: 50px;
+}
+
+.field.gender {
+  align-items: flex-start;
+  width: 580px;
+}
+
+.radio-wrapper {
+  width: 355px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.input {
+  border-radius: 20px;
+  height: 30px;
+  width: 350px;
+}
+
+.button {
+  border-radius: 20px;
+  max-width: 180px;
+  height: 50px;
+  margin-left: 220px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  text-align: left;
+}
+
+.wrapper-input {
+  height: 60px;
+  max-width: 360px;
+}
+
+.wrapper-input.large {
+  max-width: 589px;
+  display: flex;
+}
+
+.wrapper-input.checkbox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.password-strength-indicator {
+  height: 10px;
+  background-color: red;
+  transition:
+    width 0.5s ease,
+    background-color 0.5s ease;
+}
+
+.password-strength-indicator[style*='20%'] {
+  background-color: red;
+}
+
+.password-strength-indicator[style*='40%'] {
+  background-color: orange;
+}
+
+.password-strength-indicator[style*='60%'],
+.password-strength-indicator[style*='80%'] {
+  background-color: yellow;
+}
+
+.password-strength-indicator[style*='100%'] {
+  background-color: green;
+}
+
+.container-submits {
+  max-width: 1440px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 50px;
+}
+
+.item-submit {
+  width: 500px;
+  height: 600px;
+  border: 1px solid #1a1a1a ;
+}
+
+.item-submit:last-child {
+  width: 500px;
+  height: 600px;
+  border: 2px solid red;
+}
+
+.title-submit {
+  font-size: 20px;
+}
+
+.data-submit {
+
+}
+
+.image-submit {
+  max-width: 300px;
+  max-height:  300px;
+}
