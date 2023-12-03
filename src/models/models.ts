@@ -83,7 +83,6 @@ const checkPasswordStrength = (password: string) => {
   criteria.forEach((criterion) => {
     if (criterion.test(password)) strength++;
   });
-
   return strength;
 };
 

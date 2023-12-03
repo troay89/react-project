@@ -5,7 +5,7 @@ import {
   userSchema,
 } from '../models/models';
 import { setData } from '../redux/features/dataPersonalSlice';
-import { useAppDispatch } from '../redux/store/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/store/hooks';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
@@ -23,11 +23,22 @@ const Uncontrolled = () => {
     agree: useRef<HTMLInputElement>(null),
   };
 
+  const countries = useAppSelector((state) => state.countryList);
+  const [input, setInput] = useState('');
+  const [filteredCountries, setFilteredCountries] = useState<string[]>([]);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [password, setPassword] = useState<string>('');
   const [passwordStrength, setPasswordStrength] = useState<number>(0);
+
+  useEffect(() => {
+    setFilteredCountries(
+      countries.filter((country) =>
+        country.toLowerCase().includes(input.toLowerCase())
+      )
+    );
+  }, [input, countries]);
 
   useEffect(() => {
     const strengthPassword = checkPasswordStrength(password);
@@ -137,15 +148,35 @@ const Uncontrolled = () => {
             )}
           </div>
         </label>
-        <label className={'field'}>
+        <label className={'field'} htmlFor="countries">
           countries:
           <div className={'wrapper-input'}>
             <input
               className={'input'}
               type="text"
+              id="countries"
               name="countries"
               ref={refs.country}
+              value={input}
+              onChange={() => setInput(refs.country.current?.value ?? '')}
             />
+            {input && (
+              <div className="autocomplete">
+                {filteredCountries.map((country, index) => (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setInput(country);
+                      if (refs.country.current) {
+                        refs.country.current.value = country;
+                      }
+                    }}
+                  >
+                    {country}
+                  </div>
+                ))}
+              </div>
+            )}
             {errors.country && <p className={'error'}>{errors.country}</p>}
           </div>
         </label>

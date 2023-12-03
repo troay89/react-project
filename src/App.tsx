@@ -12,7 +12,27 @@ function App() {
       <Link to={'/uncontrolled'}>
         <p>uncontrolled components</p>
       </Link>
-      <img src={`${data.download}`} alt="логотип" />
+      {data.length ? (
+        <div className={'container-submits'}>
+          {data.map((dataPerson, id) => {
+            return (
+              <div className={'item-submit'} key={id}>
+                <h1 className={'title-submit'}>{dataPerson.username}</h1>
+                <p className={'data-submit'}>{dataPerson.age}</p>
+                <p className={'data-submit'}>{dataPerson.email}</p>
+                <p className={'data-submit'}>{dataPerson.country}</p>
+                <p className={'data-submit'}>{dataPerson.gender}</p>
+                <p className={'data-submit'}>{dataPerson.firstPassword}</p>
+                <img
+                  className={'image-submit'}
+                  src={`${dataPerson.download}`}
+                  alt="изображение"
+                />
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
     </>
   );
 }

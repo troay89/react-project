@@ -104,22 +104,58 @@
 .password-strength-indicator {
   height: 10px;
   background-color: red;
-  transition: width 0.5s ease, background-color 0.5s ease;
+  transition:
+    width 0.5s ease,
+    background-color 0.5s ease;
 }
 
-.password-strength-indicator[style*="20%"] {
+.password-strength-indicator[style*='20%'] {
   background-color: red;
 }
 
-.password-strength-indicator[style*="40%"] {
+.password-strength-indicator[style*='40%'] {
   background-color: orange;
 }
 
-.password-strength-indicator[style*="60%"],
-.password-strength-indicator[style*="80%"] {
+.password-strength-indicator[style*='60%'],
+.password-strength-indicator[style*='80%'] {
   background-color: yellow;
 }
 
-.password-strength-indicator[style*="100%"] {
+.password-strength-indicator[style*='100%'] {
   background-color: green;
+}
+
+.container-submits {
+  max-width: 1440px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 50px;
+}
+
+.item-submit {
+  width: 500px;
+  height: 600px;
+  border: 1px solid #1a1a1a ;
+}
+
+.item-submit:last-child {
+  width: 500px;
+  height: 600px;
+  border: 2px solid red;
+}
+
+.title-submit {
+  font-size: 20px;
+}
+
+.data-submit {
+
+}
+
+.image-submit {
+  max-width: 300px;
+  max-height:  300px;
 }

@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import dataPersonalReducer from '../features/dataPersonalSlice';
+import countryReducer from '../features/countrySlice';
 
 const store = configureStore({
   reducer: {
     data: dataPersonalReducer,
+    countryList: countryReducer,
   },
 });
 

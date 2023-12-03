@@ -4,7 +4,7 @@ import {
   DataPerson,
   userSchema,
 } from '../models/models';
-import { useAppDispatch } from '../redux/store/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/store/hooks';
 import { setData } from '../redux/features/dataPersonalSlice';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -35,11 +35,22 @@ const Controlled = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState<string>('');
   const [passwordStrength, setPasswordStrength] = useState<number>(0);
+  const countries = useAppSelector((state) => state.countryList);
+  const [input, setInput] = useState('');
+  const [filteredCountries, setFilteredCountries] = useState<string[]>([]);
 
   useEffect(() => {
     const strengthPassword = checkPasswordStrength(password);
     setPasswordStrength(strengthPassword);
   }, [password]);
+
+  useEffect(() => {
+    setFilteredCountries(
+      countries.filter((country) =>
+        country.toLowerCase().includes(input.toLowerCase())
+      )
+    );
+  }, [input, countries]);
 
   const onSubmit = (data: DataPerson) => {
     if (data.download instanceof FileList) {
@@ -121,7 +132,31 @@ const Controlled = () => {
         <label className={'field'}>
           country:
           <div className={'wrapper-input'}>
-            <input className={'input'} type="text" {...register('country')} />
+            <input
+              className={'input'}
+              type="text"
+              value={input}
+              {...register('country')}
+              onChange={(e) => {
+                setInput(e.target.value);
+                form.setValue('country', e.target.value);
+              }}
+            />
+            {input && (
+              <div className="autocomplete">
+                {filteredCountries.map((country, index) => (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setInput(country);
+                      form.setValue('country', country);
+                    }}
+                  >
+                    {country}
+                  </div>
+                ))}
+              </div>
+            )}
             {errors.country?.message && (
               <p className={'error'}>{errors.country?.message}</p>
             )}
